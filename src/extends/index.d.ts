@@ -1,4 +1,5 @@
-import 'express';
+// import 'express';
+import { Request, Response } from 'express';
 
 interface GlobalData {
   get(key: string): any;
@@ -6,8 +7,8 @@ interface GlobalData {
 
 interface MyAPI {
   GlobalData: GlobalData;
-  Logger(req: Request, res: Response, message: string): void;
-  Throw(message: string, code: number): void;
+  Logger(req: Request, res: Response, message?: string): void;
+  Throw(message: string, code?: number): void;
 }
 
 declare module 'express' {
