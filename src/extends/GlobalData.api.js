@@ -56,4 +56,8 @@ class Resource {
   get filepath() {
     return this.argv.filepath || './files';
   }
+
+  get template() {
+    return this.argv.template;
+  }
 }
