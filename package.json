@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/app.js --port=8001 --filepath=./node_modules",
-    "dev:pwd": "nodemon src/app.js --port=8001 --filepath=./node_modules --password=ydev",
+    "dev": "nodemon src/app.js --port=8081 --filepath=./files",
+    "test": "nodemon src/app.js --port=8081 --filepath=/home/yonatan/pkg --password=ydev",
     "pm2:start": "pm2 start app.json"
   },
   "keywords": [],
