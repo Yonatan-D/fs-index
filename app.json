@@ -3,7 +3,6 @@
     "name": "fs-index",
     "script": "node src/app.js --port=8080 --filepath=/home/yonatan/pkg",
     "error_file": "./logs/err.log",
-    "out_file": "./logs/out.log",
-    "log_date_format": "YYYY/MM/DD HH:mm:ss"
+    "out_file": "./logs/out.log"
   }
 }
