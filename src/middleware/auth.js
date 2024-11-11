@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
     req.hostname === 'localhost' // 本地允许访问
     || !password // 未开启密码
     || (password && req.headers['x-token'] === password)  // 请求头携带 x-token
-    || (password && req.headers.cookie?.includes('x-token'+password)) // 浏览器携带 cookie
+    || (password && req.headers.cookie?.includes('x-token='+password)) // 浏览器携带 cookie
     || (password && req.query?.token === password) // url携带 token
   ) {
     return next();
