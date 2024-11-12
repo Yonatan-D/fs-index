@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   const password = MyAPI.GlobalData.get('password');
 
   if (
-    req.hostname === 'localhost' // 本地允许访问
+    ['localhost', '127.0.0.1'].includes(req.hostname) // 本地允许访问
     || !password // 未开启密码
     || (password && req.headers['x-token'] === password)  // 请求头携带 x-token
     || (password && req.headers.cookie?.includes('x-token='+password)) // 浏览器携带 cookie
