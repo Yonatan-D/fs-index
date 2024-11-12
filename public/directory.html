@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>listing directory {directory}</title>
     <style>{style}</style>
+    <style>
+      .header {
+        padding-right: 10px;
+      }
+      .view-details .date, .view-details .size {
+        direction: ltr;
+      }
+    </style>
+    <script>
+      // 将url携带的token参数设置到Cookie
+      const searchParams = new URLSearchParams(window.location.search);
+      const token = searchParams.get('token');
+      if (token ) {
+        document.cookie = 'x-token=' + token + ';path=/';
+      }
+    </script>
     <script>
       function $(id){
         var el = 'string' == typeof id
@@ -78,5 +94,51 @@
       <h1><a href="/">~</a>{linked-path}</h1>
       {files}
     </div>
+
+    <script>
+      /**
+       * 日期格式化
+       * @param {string} dateStr
+       * @returns {string} 例如: 2024-10-16 09:30:01
+       */
+      function formatDate(dateStr) {
+        if (!dateStr) return dateStr;
+
+        const date = new Date(dateStr);
+        // 获取年、月、日、小时、分钟、秒
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要加1
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        // 组合成所需格式
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
+
+      /**
+       * 文件大小格式化
+       * @param {number} bytes
+       * @return {string} 例如: 10 KB
+       */
+      function formatSize (bytes) {
+        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+        if (bytes == 0) return '0 B';
+        const index = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+        return (bytes / Math.pow(1024, index)).toFixed(1) + ' ' + sizes[index];
+      }
+
+      // 将日期转换为 YYYY-MM-DD HH:mm:ss 的格式
+      const fileDateEleList = Array.from(document.querySelectorAll("ul#files li a span[class='date']"));
+      fileDateEleList.forEach((item) => {
+        item.innerHTML = formatDate(item.innerHTML);
+      })
+
+      // 将文件大小转换为 human readable 的大小表示
+      const fileSizeEleList = Array.from(document.querySelectorAll("ul#files li a:not(.icon-directory) span[class='size']"));
+      fileSizeEleList.forEach((item) => {
+        item.innerHTML = formatSize(item.innerHTML);
+      })
+    </script>
   </body>
 </html>
