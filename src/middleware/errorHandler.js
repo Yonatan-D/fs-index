@@ -5,7 +5,11 @@ module.exports = (err, req, res, next) => {
 
   if (err.code == 404) return;
 
-  res.status(err.code).sendFile(path.join(__dirname, '../../public/500.html'));
+  const statusCode = (typeof err.code === 'number')
+    ? err.code
+    : 500
+
+  res.status(statusCode).sendFile(path.join(__dirname, '../../public/500.html'));
   // res.status(500).send({ message: '服务异常' });
 
   // 日志打印
