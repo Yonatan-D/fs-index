@@ -37,7 +37,8 @@ app.use(location.pathname, middlewares);
 // 如果要兼容 IPv6, 就不能配置 0.0.0.0, 而是检查并移除 ::ffff: 前缀
 app.listen(location.port, '0.0.0.0', () => {
   let startTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
-  console.log(c.green(`[${startTime}] [fsIndex] Starting...`));
-  console.log(c.gray('Index of'), resource.filepath);
-  console.log(c.gray('Listening at'), c.cyan(location.href));
+  console.log(c.gray(`[${startTime}]`), c.cyan('[fsIndex]'), c.green('Starting...\n'));
+  console.log(c.bold('Index of'), c.yellow(resource.filepath));
+  console.log(c.bold('Listening at'), c.cyan(location.href));
+  console.log();
 })

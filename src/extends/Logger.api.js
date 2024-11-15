@@ -16,7 +16,7 @@ module.exports = (app) => {
     }
 
     // 日志内容
-    let dateStr = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    let dateStr = c.gray(`[${dayjs().format('YYYY-MM-DD HH:mm:ss')}]`);
     let reqStr = c.green(req.ip)
       + ' -- ' + res.statusCode + ' GET ' 
       + c.yellow(decodeURIComponent(req.url))
@@ -27,7 +27,7 @@ module.exports = (app) => {
     
     if (!filterUrlList.includes(req.url)) {
       // 输出到控制台
-      console.log(`[${dateStr}] ${reqStr} ${messageStr}`);
+      console.log(`${dateStr} ${reqStr} ${messageStr}`);
     }
   }
 }
