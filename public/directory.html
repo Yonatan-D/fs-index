@@ -12,6 +12,27 @@
       .view-details .date, .view-details .size {
         direction: ltr;
       }
+      /* 隐藏右键菜单的默认样式 */
+      #contextMenu {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        border: 1px solid #ccc;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        z-index: 1000;
+      }
+      #contextMenu ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      #contextMenu ul li {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      #contextMenu ul li:hover {
+        background-color: #e9e9e9;
+      }
     </style>
     <script>
       // 将url携带的token参数设置到Cookie
@@ -95,6 +116,13 @@
       {files}
     </div>
 
+    <div id="contextMenu">
+      <ul>
+        <li>预览</li>
+        <li>下载</li>
+      </ul>
+    </div>
+
     <script>
       /**
        * 日期格式化
@@ -139,6 +167,55 @@
       fileSizeEleList.forEach((item) => {
         item.innerHTML = formatSize(item.innerHTML);
       })
+    </script>
+    <script>
+      let selectFile = null;
+
+      // 获取右键菜单元素
+      const contextMenu = document.getElementById('contextMenu');
+
+      // 隐藏右键菜单
+      function hideContextMenu() {
+        contextMenu.style.display = 'none';
+      }
+
+      // 显示右键菜单
+      function showContextMenu(event) {
+        event.preventDefault(); // 阻止默认的右键菜单
+        const target = event.target;
+        if (target.parentElement?.href) {
+          selectFile = target.parentElement.href;
+          contextMenu.style.display = 'block';
+          contextMenu.style.left = `${event.pageX}px`;
+          contextMenu.style.top = `${event.pageY}px`;
+        }
+      }
+
+      // 处理右键点击事件
+      function handleContextMenu(event) {
+        try {
+          hideContextMenu();
+          showContextMenu(event);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
+      // 监听右键点击事件
+      document.addEventListener('contextmenu', handleContextMenu);
+
+      // 监听点击事件，点击页面其他地方时隐藏右键菜单
+      document.addEventListener('click', hideContextMenu);
+
+      // 监听右键菜单内部点击事件，点击菜单项时隐藏右键菜单
+      contextMenu.addEventListener('click', (event) => {
+        event.stopPropagation(); // 阻止事件冒泡
+        console.log(event.target.innerHTML, selectFile);
+        hideContextMenu();
+      });
+
+      // // 防止在右键菜单里再次右键，导致出现默认菜单
+      // contextMenu.addEventListener('contextmenu', handleContextMenu);
     </script>
   </body>
 </html>
