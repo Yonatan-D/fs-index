@@ -157,16 +157,16 @@
       }
 
       // 将日期转换为 YYYY-MM-DD HH:mm:ss 的格式
-      const fileDateEleList = Array.from(document.querySelectorAll("ul#files li a span[class='date']"));
+      const fileDateEleList = Array.from(document.querySelectorAll("ul#files li a span.date"));
       fileDateEleList.forEach((item) => {
         item.innerHTML = formatDate(item.innerHTML);
-      })
+      });
 
       // 将文件大小转换为 human readable 的大小表示
-      const fileSizeEleList = Array.from(document.querySelectorAll("ul#files li a:not(.icon-directory) span[class='size']"));
+      const fileSizeEleList = Array.from(document.querySelectorAll("ul#files li a:not(.icon-directory) span.size"));
       fileSizeEleList.forEach((item) => {
         item.innerHTML = formatSize(item.innerHTML);
-      })
+      });
     </script>
     <script>
       let selectFile = null;
