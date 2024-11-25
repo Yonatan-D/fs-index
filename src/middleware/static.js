@@ -65,35 +65,39 @@ module.exports = (req, res, next) => {
   })
   const downloader = (req, res, next) => {
     // 请求参数包含download时，指示浏览器下载文件而不是直接显示它
-    if (req.query.hasOwnProperty('download')) {
-      const filePath = path.join(publicDir, req.path);
-      const exists = fs.pathExistsSync(filePath);
-      if (exists) {
-        const stats = fs.statSync(filePath);
-        if (stats.isFile()) {
-          // 如果是文件直接下载
-          res.download(filePath, (err) => {
-            if (err) {
-              MyAPI.Throw(err);
-            }     
-          });
-        } else if (stats.isDirectory()) {
-          // 如果是目录就压缩后下载
-          const outPath = `${temppath}/${req.path.substring(1)}-${new Date().getTime()}.zip`;
-          compressDirectoryWithZip(filePath, outPath, () => {
-            res.sendFile(outPath, (err) => {
-              if (err) {
-                MyAPI.Throw(err);
-              } 
-              fs.unlinkSync(outPath); // 删除临时压缩包
-            });
-          });
-        }
-      } else {
-        console.log(`${filePath} 不存在`);
-        next();
-      }
+    if (req.query.download === undefined)
+      return next();
+
+    const filePath = path.join(publicDir, req.path);
+
+    if (!fs.pathExistsSync(filePath)) {
+      console.log(`${filePath} 不存在`);
+      return next();
+    }
+    
+    const stats = fs.statSync(filePath);
+
+    if (stats.isFile()) {
+      // 如果是文件直接下载
+      res.download(filePath, (err) => {
+        if (err) {
+          MyAPI.Throw(err);
+        }     
+      });
+    } else if (stats.isDirectory()) {
+      // 如果是目录就压缩后下载
+      const filename = path.basename(req.path) + '-' + new Date().getTime() + '.zip';
+      const outPath = path.join(temppath, filename);
+      compressDirectoryWithZip(filePath, outPath, () => {
+        res.download(outPath, (err) => {
+          if (err) {
+            MyAPI.Throw(err);
+          } 
+          fs.unlinkSync(outPath); // 删除临时压缩包
+        });
+      });
     } else {
+      // 除了文件和目录，还有其他可能的情况，比如符号链接、设备文件、管道文件等
       next();
     }
   }
