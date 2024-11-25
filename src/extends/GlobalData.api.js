@@ -57,6 +57,10 @@ class Resource {
     return this.argv.filepath || './files';
   }
 
+  get temppath() {
+    return this.argv.temppath || '/tmp/fsIndex';
+  }
+
   get template() {
     return this.argv.template;
   }

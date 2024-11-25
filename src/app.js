@@ -22,6 +22,7 @@ function init() {
     console.log(`initializing...\n`);
 
     ensureFilePath(resource.filepath);
+    ensureFilePath(resource.temppath);
 
     console.log(`\ninitialization completed.\n`);
   } catch (error) {
