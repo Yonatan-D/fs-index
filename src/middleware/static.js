@@ -68,7 +68,8 @@ module.exports = (req, res, next) => {
     if (req.query.download === undefined)
       return next();
 
-    const filePath = path.join(publicDir, req.path);
+    const reqPath = decodeURIComponent(req.path);
+    const filePath = path.join(publicDir, reqPath);
 
     if (!fs.pathExistsSync(filePath)) {
       console.log(`${filePath} 不存在`);
@@ -86,13 +87,13 @@ module.exports = (req, res, next) => {
       });
     } else if (stats.isDirectory()) {
       // 如果是目录就压缩后下载
-      const filename = path.basename(req.path) + '-' + new Date().getTime() + '.zip';
+      const filename = path.basename(reqPath) + '-' + new Date().getTime() + '.zip';
       const outPath = path.join(temppath, filename);
       compressDirectoryWithZip(filePath, outPath, () => {
         res.download(outPath, (err) => {
           if (err) {
-            MyAPI.Throw(err);
-          } 
+            console.log(err);
+          }
           fs.unlinkSync(outPath); // 删除临时压缩包
         });
       });
