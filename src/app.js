@@ -27,6 +27,7 @@ function init() {
     console.log(`\ninitialization completed.\n`);
   } catch (error) {
     console.log(c.bgRed('[fsIndex] init - 系统启动异常'));
+    app.MyAPI.Throw(error);
   }
 }
 
