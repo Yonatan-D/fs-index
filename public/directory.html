@@ -185,7 +185,7 @@
         try {
           hideContextMenu();
           const target = event.target;
-          if (target.parentElement?.href) {
+          if (target.parentElement && target.parentElement.href) {
             selectFile = target.parentElement.href;
             contextMenu.style.display = 'block';
             contextMenu.style.left = `${event.pageX}px`;
