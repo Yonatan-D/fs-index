@@ -9,9 +9,11 @@ const loadExtends = require('./extends');
 
 const app = express();
 loadExtends(app);
-const config = app.MyAPI.GlobalData.get('config');
-const location = app.MyAPI.GlobalData.get('location');
-const resource = app.MyAPI.GlobalData.get('resource');
+const {
+  config,
+  location,
+  resource,
+} = app.MyAPI.GlobalData;
 
 // 检查文件路径，不存在就创建
 const ensureFilePath = (filepath) => {

@@ -3,7 +3,7 @@ const c = require('kleur');
 
 module.exports = (req, res, next) => {
   const { MyAPI } = req.app;
-  const password = MyAPI.GlobalData.get('password');
+  const { password } = MyAPI.GlobalData;
 
   if (
     ['localhost', '127.0.0.1'].includes(req.hostname) // 本地允许访问

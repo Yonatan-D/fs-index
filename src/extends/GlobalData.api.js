@@ -11,11 +11,11 @@ module.exports = (app) => {
     password: typeof argv.password === 'string' ? argv.password : undefined,
   }
 
-  return {
-    get: (key) => {
-      return _globalData[key];
+  return new Proxy(_globalData, {
+    get(target, key) {
+      return target[key] ? target[key] : '';
     }
-  }
+  })
 }
 
 class Location {

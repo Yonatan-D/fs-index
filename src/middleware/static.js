@@ -55,7 +55,7 @@ const compressDirectoryWithZip = (dirPath, outPath, done) => {
 
 module.exports = (req, res, next) => {
   const { MyAPI } = req.app;
-  const { filepath: publicDir, temppath, template } = MyAPI.GlobalData.get('resource');
+  const { filepath: publicDir, temppath, template } = MyAPI.GlobalData.resource;
 
   const serve = express.static(publicDir);
   const index = serveIndex(publicDir, {
