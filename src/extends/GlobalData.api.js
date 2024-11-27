@@ -5,6 +5,7 @@ module.exports = (app) => {
   const argv = minimist(process.argv.slice(2));
 
   const _globalData = {
+    config: argv.config || '../config/config.toml',
     location: new Location(argv),
     resource: new Resource(argv),
     password: typeof argv.password === 'string' ? argv.password : undefined,

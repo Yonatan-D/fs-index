@@ -2,11 +2,14 @@ const express = require('express');
 const c = require('kleur');
 const dayjs = require('dayjs');
 const fs = require('fs-extra')
+const path = require('path');
+const toml = require('toml');
 const middlewares = require('./middleware');
 const loadExtends = require('./extends');
 
 const app = express();
 loadExtends(app);
+const config = app.MyAPI.GlobalData.get('config');
 const location = app.MyAPI.GlobalData.get('location');
 const resource = app.MyAPI.GlobalData.get('resource');
 
@@ -16,11 +19,25 @@ const ensureFilePath = (filepath) => {
   fs.ensureDirSync(filepath);
 }
 
+// 加载配置
+const loadConfig = (config) => {
+  try {
+    const cfgFile = path.join(__dirname, config);
+    const cfgContent = toml.parse(fs.readFileSync(cfgFile, 'utf8'));
+    // console.log(cfgContent);
+    
+    console.log(`Config: ${cfgFile}`);
+  } catch (error) {
+    console.log(`Config: 读取配置文件失败 (${error.message})`);
+  }
+}
+
 // 初始化
 function init() {
   try {
     console.log(`initializing...\n`);
 
+    loadConfig(config);
     ensureFilePath(resource.filepath);
     ensureFilePath(resource.temppath);
 
