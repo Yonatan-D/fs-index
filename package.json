@@ -1,10 +1,10 @@
 {
   "name": "fs-index",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon src/app.js --port=8081 --filepath=./files",
-    "test": "nodemon src/app.js --port=8081 --filepath=/home/yonatan/pkg --password=ydev",
+    "dev": "nodemon src/server.js --port=8081 --filepath=./files",
+    "test": "nodemon src/server.js --port=8081 --filepath=/home/yonatan/pkg --password=ydev",
     "pm2:start": "pm2 start app.json"
   },
   "keywords": [],

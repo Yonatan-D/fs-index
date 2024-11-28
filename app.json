@@ -1,7 +1,7 @@
 {
   "apps": {
     "name": "fs-index",
-    "script": "node src/app.js --port=8080 --filepath=/home/yonatan/pkg --password=ydev",
+    "script": "node src/server.js --port=8080 --filepath=/home/yonatan/pkg --password=ydev",
     "error_file": "./logs/err.log",
     "out_file": "./logs/out.log"
   }
