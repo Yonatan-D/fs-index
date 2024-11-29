@@ -1,6 +1,8 @@
-const path = require('path');
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-module.exports = (req, res, next) => {
+export default function notFound(req, res, next) {
   const { MyAPI } = req.app;
 
   res.status(404).sendFile(path.join(__dirname, '../../public/404.html'));

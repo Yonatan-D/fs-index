@@ -1,7 +1,7 @@
-const c = require('kleur');
-const dayjs = require('dayjs');
+import c from 'kleur';
+import dayjs from 'dayjs';
 
-module.exports = (app) => {
+export default function Logger(app) {
   return (req, res, message) => {
     // 不记录日志的请求
     const filterUrlList = [

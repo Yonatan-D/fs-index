@@ -1,6 +1,8 @@
-const path = require('path');
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-module.exports = (err, req, res, next) => {
+export default function errorHandler(err, req, res, next) {
   const { MyAPI } = req.app;
 
   if (err.code == 404) return;

@@ -1,11 +1,16 @@
-const requireAll = require('require-all');
+const apis = [
+  import('./GlobalData.api.js'),
+  import('./Logger.api.js'),
+  import('./Throw.api.js'),
+]
 
-module.exports = function loadExtends(app) {
-  const api = requireAll({
-    dirname: __dirname,
-    filter: /(.+)\.api\.js$/,
-    resolve: fn => fn(app),
-  })
+export default async function loadExtends(app) {
+  const modules = await Promise.all(apis);
+  const api = modules.reduce((acc, module) => {
+    const fn = module.default;
+    acc[fn.name] = fn(app);
+    return acc;
+  }, {});
   if (!app.MyAPI) app.MyAPI = {};
-  app = Object.assign(app.MyAPI, api);
+  app.MyAPI = Object.assign(app.MyAPI, api);
 }

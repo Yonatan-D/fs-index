@@ -1,6 +1,6 @@
-const minimist = require('minimist');
+import minimist from 'minimist';
 
-module.exports = (app) => {
+export default function GlobalData(app) {
 
   const argv = minimist(process.argv.slice(2));
 

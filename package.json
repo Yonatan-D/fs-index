@@ -2,6 +2,7 @@
   "name": "fs-index",
   "version": "1.0.0",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js --port=8081 --filepath=./files",
     "test": "nodemon src/server.js --port=8081 --filepath=/home/yonatan/pkg --password=ydev",
@@ -18,7 +19,6 @@
     "fs-extra": "^11.2.0",
     "kleur": "^4.1.5",
     "minimist": "^1.2.8",
-    "require-all": "^3.0.0",
     "serve-index": "^1.9.1",
     "toml": "^3.0.0"
   },

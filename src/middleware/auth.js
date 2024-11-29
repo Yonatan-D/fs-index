@@ -1,7 +1,8 @@
-const path = require('path');
-const c = require('kleur');
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-module.exports = (req, res, next) => {
+export default function auth(req, res, next) {
   const { MyAPI } = req.app;
   const { password } = MyAPI.GlobalData;
 

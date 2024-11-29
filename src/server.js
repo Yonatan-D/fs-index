@@ -1,19 +1,17 @@
-const express = require('express');
-const c = require('kleur');
-const dayjs = require('dayjs');
-const fs = require('fs-extra')
-const path = require('path');
-const toml = require('toml');
-const middlewares = require('./middleware');
-const loadExtends = require('./extends');
+import express from 'express';
+import c from 'kleur';
+import dayjs from 'dayjs';
+import fs from 'fs-extra';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import toml from 'toml';
+import loadModules from './middleware/index.js';
+import loadExtends from './extends/index.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
-loadExtends(app);
-const {
-  config,
-  location,
-  resource,
-} = app.MyAPI.GlobalData;
+
 
 // 检查文件路径，不存在就创建
 const ensureFilePath = (filepath) => {
@@ -35,7 +33,14 @@ const loadConfig = (config) => {
 }
 
 // 初始化
-function init() {
+async function init() {
+  await loadExtends(app);
+
+  const {
+    config,
+    resource,
+  } = app.MyAPI.GlobalData;
+
   try {
     console.log(`initializing...\n`);
 
@@ -50,16 +55,18 @@ function init() {
   }
 }
 
-init()
-
-app.use(location.pathname, middlewares);
-
-// 0.0.0.0: 强制节点服务器使用Ipv4侦听
-// 如果要兼容 IPv6, 就不能配置 0.0.0.0, 而是检查并移除 ::ffff: 前缀
-app.listen(location.port, '0.0.0.0', () => {
-  let startTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
-  console.log(c.gray(`[${startTime}]`), c.cyan('[fsIndex]'), c.green('Starting...\n'));
-  console.log(c.bold('Index of'), c.yellow(resource.filepath));
-  console.log(c.bold('Listening at'), c.cyan(location.href));
-  console.log();
+init().then(() => {
+  const { location, resource } = app.MyAPI.GlobalData;
+  
+  loadModules(app);
+  
+  // 0.0.0.0: 强制节点服务器使用Ipv4侦听
+  // 如果要兼容 IPv6, 就不能配置 0.0.0.0, 而是检查并移除 ::ffff: 前缀
+  app.listen(location.port, '0.0.0.0', () => {
+    let startTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    console.log(c.gray(`[${startTime}]`), c.cyan('[fsIndex]'), c.green('Starting...\n'));
+    console.log(c.bold('Index of'), c.yellow(resource.filepath));
+    console.log(c.bold('Listening at'), c.cyan(location.href));
+    console.log();
+  })
 })

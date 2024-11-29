@@ -1,4 +1,4 @@
-module.exports = (app) => {
+export default function Throw(app) {
   return (message, code) => {
     if (!code) code = 500;
     throw new StandardError(message, code);

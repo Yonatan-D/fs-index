@@ -1,10 +1,12 @@
-const express = require('express');
-const serveIndex = require('serve-index');
-const path = require('path');
-const fs = require('fs-extra');
-const { execSync, exec } = require('child_process');
-const { platform } = require('os');
-const { compose } = require('../utils');
+import express from 'express';
+import serveIndex from 'serve-index';
+import path from 'node:path';
+import fs from 'fs-extra';
+import { execSync, exec } from 'node:child_process';
+import { platform } from 'node:os';
+import { compose } from '../utils.js';
+import { fileURLToPath } from 'node:url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * 获取zip安装命令提示
@@ -53,7 +55,7 @@ const compressDirectoryWithZip = (dirPath, outPath, done) => {
   }
 }
 
-module.exports = (req, res, next) => {
+export default function staticMiddleware(req, res, next) {
   const { MyAPI } = req.app;
   const { filepath: publicDir, temppath, template } = MyAPI.GlobalData.resource;
 
