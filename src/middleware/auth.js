@@ -1,6 +1,4 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default function auth(req, res, next) {
   const { MyAPI } = req.app;
@@ -17,7 +15,7 @@ export default function auth(req, res, next) {
   }
 
   // 拒绝访问
-  res.status(401).sendFile(path.join(__dirname, '../../public/401.html'));
+  res.status(401).sendFile(path.join(MyAPI.GlobalData.appRoot, 'public/401.html'));
 
   // 日志打印
   MyAPI.Logger(req, res, '无权限访问');

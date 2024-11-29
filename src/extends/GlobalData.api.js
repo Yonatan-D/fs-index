@@ -1,11 +1,16 @@
 import minimist from 'minimist';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const appRoot = path.join(__dirname, '../../');
 
 export default function GlobalData(app) {
 
   const argv = minimist(process.argv.slice(2));
 
   const _globalData = {
-    config: argv.config || './config/config.toml',
+    appRoot,
+    config: path.join(appRoot, (argv.config || './config/config.toml')),
     location: new Location(argv),
     resource: new Resource(argv),
     password: typeof argv.password === 'string' ? argv.password : undefined,

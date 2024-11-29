@@ -5,8 +5,6 @@ import fs from 'fs-extra';
 import { execSync, exec } from 'node:child_process';
 import { platform } from 'node:os';
 import { compose } from '../utils.js';
-import { fileURLToPath } from 'node:url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * 获取zip安装命令提示
@@ -63,7 +61,7 @@ export default function staticMiddleware(req, res, next) {
   const index = serveIndex(publicDir, {
     icons: true,
     view: 'details',
-    template: template || path.join(__dirname, '../../public/directory.html'),
+    template: template || path.join(MyAPI.GlobalData.appRoot, 'public/directory.html'),
   })
   const downloader = (req, res, next) => {
     // 请求参数包含download时，指示浏览器下载文件而不是直接显示它

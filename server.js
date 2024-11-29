@@ -2,13 +2,10 @@ import express from 'express';
 import c from 'kleur';
 import dayjs from 'dayjs';
 import fs from 'fs-extra';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import toml from 'toml';
 import loadModules from './src/middleware/index.js';
 import loadExtends from './src/extends/index.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -20,9 +17,8 @@ const ensureFilePath = (filepath) => {
 }
 
 // 加载配置
-const loadConfig = (config) => {
+const loadConfig = (cfgFile) => {
   try {
-    const cfgFile = path.join(__dirname, config);
     const cfgContent = toml.parse(fs.readFileSync(cfgFile, 'utf8'));
     // console.log(cfgContent);
     
@@ -57,7 +53,7 @@ async function init() {
 
 init().then(() => {
   const { location, resource } = app.MyAPI.GlobalData;
-  
+
   loadModules(app);
   
   // 0.0.0.0: 强制节点服务器使用Ipv4侦听

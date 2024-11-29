@@ -1,6 +1,4 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default function errorHandler(err, req, res, next) {
   const { MyAPI } = req.app;
@@ -11,7 +9,7 @@ export default function errorHandler(err, req, res, next) {
     ? err.code
     : 500
 
-  res.status(statusCode).sendFile(path.join(__dirname, '../../public/500.html'));
+  res.status(statusCode).sendFile(path.join(MyAPI.GlobalData.appRoot, 'public/500.html'));
   // res.status(500).send({ message: '服务异常' });
 
   // 日志打印
