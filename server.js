@@ -5,8 +5,8 @@ import fs from 'fs-extra';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import toml from 'toml';
-import loadModules from './middleware/index.js';
-import loadExtends from './extends/index.js';
+import loadModules from './src/middleware/index.js';
+import loadExtends from './src/extends/index.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
