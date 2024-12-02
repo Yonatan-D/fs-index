@@ -57,11 +57,12 @@ export default function staticMiddleware(req, res, next) {
   const { MyAPI } = req.app;
   const { filepath: publicDir, temppath, template } = MyAPI.GlobalData.resource;
 
+  const widgets = express.static('src/web/widgets');
   const serve = express.static(publicDir);
   const index = serveIndex(publicDir, {
     icons: true,
     view: 'details',
-    template: template || path.join(MyAPI.GlobalData.appRoot, 'public/directory.html'),
+    template: template || path.join(MyAPI.GlobalData.appRoot, 'src/web/index.html'),
   })
   const downloader = (req, res, next) => {
     // 请求参数包含download时，指示浏览器下载文件而不是直接显示它
@@ -103,7 +104,7 @@ export default function staticMiddleware(req, res, next) {
     }
   }
 
-  const fn = compose([downloader, serve, index]);
+  const fn = compose([downloader, widgets, serve, index]);
   fn(req, res, next);
   // 上面写法等同于以下
   // downloader(req, res, () => {

@@ -1,0 +1,27 @@
+.header {
+  padding-right: 10px;
+}
+.view-details .date, .view-details .size {
+  direction: ltr;
+}
+/* 隐藏右键菜单的默认样式 */
+#contextMenu {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+#contextMenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+#contextMenu ul li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+#contextMenu ul li:hover {
+  background-color: #e9e9e9;
+}

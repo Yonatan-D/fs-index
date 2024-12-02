@@ -9,7 +9,7 @@ export default function errorHandler(err, req, res, next) {
     ? err.code
     : 500
 
-  res.status(statusCode).sendFile(path.join(MyAPI.GlobalData.appRoot, 'public/500.html'));
+  res.status(statusCode).sendFile(path.join(MyAPI.GlobalData.appRoot, 'src/web/500.html'));
   // res.status(500).send({ message: '服务异常' });
 
   // 日志打印
