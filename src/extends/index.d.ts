@@ -1,8 +1,8 @@
-// import 'express';
+import 'express';
 import { Request, Response } from 'express';
 
 interface GlobalData {
-  get(key: string): any;
+  [key: string]: any;
 }
 
 interface MyAPI {

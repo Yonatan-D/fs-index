@@ -31,10 +31,11 @@ async function createServer() {
   await loadExtends(app);
   await loadModules(app);
 
+  const { MyAPI } = app;
   const {
     config,
     resource,
-  } = app.MyAPI.GlobalData;
+  } = MyAPI.GlobalData;
 
   try {
     console.log(`initializing...\n`);
@@ -46,14 +47,15 @@ async function createServer() {
     console.log(`\ninitialization completed.\n`);
   } catch (error) {
     console.log(c.bgRed('[fsIndex] init - 系统启动异常'));
-    app.MyAPI.Throw(error);
+    MyAPI.Throw(error);
   }
 
   return { app };
 }
 
 createServer().then(({ app }) => {
-  const { location, resource } = app.MyAPI.GlobalData;
+  const { MyAPI } = app;
+  const { location, resource } = MyAPI.GlobalData;
 
   // 0.0.0.0: 强制节点服务器使用Ipv4侦听
   // 如果要兼容 IPv6, 就不能配置 0.0.0.0, 而是检查并移除 ::ffff: 前缀
