@@ -1,72 +1,84 @@
-function tpl() {
-  const html = `
-    <ul>
-      <li>预览</li>
-      <li>下载</li>
-    </ul>
-  `
-  const contextMenu = document.createElement('div');
-  contextMenu.id = 'contextMenu';
-  contextMenu.innerHTML = html;
+'use strict';
 
-  let selectFile = null;
+function ContextMenu() {
+  const [showMenu, setShowMenu] = React.useState(false);
+  const [selectFile, setSelectFile] = React.useState(null);
+  const [menuPosition, setMenuPosition] = React.useState({ x: 0, y: 0 });
+  const menu = ['预览', '下载'];
 
-  // 隐藏右键菜单
-  function hideContextMenu() {
-    contextMenu.style.display = 'none';
-  }
-
-  // 显示右键菜单
-  function showContextMenu(event) {
-    event.preventDefault(); // 阻止默认的右键菜单
-    try {
-      hideContextMenu();
+  React.useEffect(() => {
+    const handleContextMenu = (event) => {
+      event.preventDefault();
       const target = event.target;
-      if (target.parentElement && target.parentElement.href) {
-        selectFile = target.parentElement.href;
-        contextMenu.style.display = 'block';
-        contextMenu.style.left = `${event.pageX}px`;
-        contextMenu.style.top = `${event.pageY}px`;
+      if (target.href) {
+        setSelectFile(target.href);
+        setMenuPosition({ x: event.pageX, y: event.pageY });
+        setShowMenu(true);
+      } else if (target.parentElement && target.parentElement.href) {
+        setSelectFile(target.parentElement.href);
+        setMenuPosition({ x: event.pageX, y: event.pageY });
+        setShowMenu(true);
+      } else {
+        setShowMenu(false);
       }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+    };
 
-  function handleContextMenu(type, url) {
-    console.log(type, url);
+    const handleClick = () => {
+      setShowMenu(false);
+    };
+
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
+
+  const handleMenuItemClick = (type) => {
+    console.log(type, selectFile);
     switch (type) {
       case '预览':
-        alert('🚧施工中')
+        alert('🚧施工中');
         break;
       case '下载':
-        window.location.href = url + '?download';
+        window.location.href = `${selectFile}?download`;
         break;
       default:
-        window.open(url);
+        window.open(selectFile);
         break;
     }
-  }
-
-
-  // 监听右键菜单内部点击事件，点击菜单项时隐藏右键菜单
-  contextMenu.onclick = (event) => {
-    event.stopPropagation(); // 阻止事件冒泡
-    handleContextMenu(event.target.innerHTML, selectFile);
-    hideContextMenu();
   };
-  // 监听右键点击事件
-  document.oncontextmenu = showContextMenu;
-  // 监听点击事件，点击页面其他地方时隐藏右键菜单
-  document.onclick = hideContextMenu;
 
-
-  const body = document.querySelector('body');
-  body.appendChild(contextMenu); 
+  return (
+    <div
+      id="contextMenu"
+      style={{
+        display: showMenu ? 'block' : 'none',
+        left: `${menuPosition.x}px`,
+        top: `${menuPosition.y}px`,
+      }}
+      className="bg-white border rounded shadow-lg position-absolute"
+    >
+      <ul className="list-unstyled p-0 m-0">
+        {menu.map((item) => (
+          <li
+            key={item}
+            className="pt-3 pr-4 pb-3 pl-4 cursor-pointer hover:bg-gray-100"
+            onClick={() => handleMenuItemClick(item)}
+          >{item}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 function install() {
-  tpl();
+  console.log('✔ ContextMenu');
+  const el = window.$app.dom.create('div', ContextMenu);
+  window.$app.dom.appendTo('#app', el);
 }
 
-install();
+window.$app = window.$app || {};
+$app.widgets = [install, ...($app.widgets || [])];

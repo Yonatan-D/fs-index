@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import c from 'kleur';
 import dayjs from 'dayjs';
 import fs from 'fs-extra';
@@ -29,6 +30,7 @@ async function createServer() {
 
   // 初始化
   await loadExtends(app);
+  app.use(compression());
   await loadModules(app);
 
   const { MyAPI } = app;

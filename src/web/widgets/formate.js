@@ -81,9 +81,9 @@ const formatSize = (bytes) => {
   return (bytes / Math.pow(1024, index)).toFixed(1) + ' ' + sizes[index];
 }
 
-
-
 function install() {
+  console.log('✔ formate');
+  
   // 获取文件列表中的a标签
   const fileList = Array.from(document.querySelectorAll('ul#files li a'));
   fileList.forEach(el => {
@@ -94,14 +94,21 @@ function install() {
     const dateEl = el.querySelector('span.date');
     const dateStr = formatDate(dateEl.innerHTML);
     dateEl.setAttribute('title', dateStr);
+    dateEl.style.direction = 'ltr';
     dateEl.innerHTML = datetime2latest(dateStr);
 
     // 如果不是目录，格式化文件大小
     if (!el.className.includes('icon-directory')) {
       const sizeEl = el.querySelector('span.size');
+      sizeEl.style.direction = 'ltr';
       sizeEl.innerHTML = formatSize(sizeEl.innerHTML);
     }
   })
+
+  document.querySelector('#app').style.opacity = 1;
 }
 
-install();
+// window.$app = window.$app || {};
+// $app.widgets = [install, ...($app.widgets || [])];
+
+install()
