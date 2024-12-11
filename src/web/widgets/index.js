@@ -1,7 +1,7 @@
 const widgets = [
   '/search.js',
   // './formate.js',
-  './contextMenu.js',
+  '/contextMenu.js',
 ]
 
 export function initWidgets() {
