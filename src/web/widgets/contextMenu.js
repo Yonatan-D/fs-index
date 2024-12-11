@@ -38,12 +38,19 @@ function ContextMenu() {
 
   const handleMenuItemClick = (type) => {
     console.log(type, selectFile);
+
+    const fileUrl = decodeURIComponent(selectFile);
+    const fileName = fileUrl.slice(fileUrl.lastIndexOf('/') + 1);
+
     switch (type) {
       case '预览':
         alert('🚧施工中');
         break;
       case '下载':
-        window.location.href = `${selectFile}?download`;
+        const link = document.createElement('a');
+        link.href = `${selectFile}?download`;
+        link.download = fileName;
+        link.click();
         break;
       default:
         window.open(selectFile);
