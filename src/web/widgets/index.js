@@ -1,5 +1,5 @@
 const widgets = [
-  '/search.js',
+  // '/search.js',
   // './formate.js',
   '/contextMenu.js',
 ]
