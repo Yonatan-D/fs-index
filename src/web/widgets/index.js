@@ -1,6 +1,5 @@
 const widgets = [
-  // '/search.js',
-  // './formate.js',
+  '/search.js',
   '/contextMenu.js',
 ]
 
@@ -50,7 +49,6 @@ export function installWidgets() {
     }
   }, 10)
 }
-
 
 initApis();
 initWidgets();

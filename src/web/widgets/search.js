@@ -59,20 +59,21 @@ function search() {
   });
 }
 
-function tpl() {
-  const input = document.createElement('input');
-  input.id = 'search';
-  input.type = 'text';
-  input.placeholder = 'Search';
-  input.autocomplete = 'off';
-  input.onkeyup = search;
+class SearchInput extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-  const body = document.querySelector('body');
-  body.appendChild(input);
+  connectedCallback() {
+    const input = document.createElement('input');
+    input.id = 'search';
+    input.type = 'text';
+    input.placeholder = 'Search';
+    input.autocomplete = 'off';
+    input.onkeyup = search;
+
+    this.appendChild(input);
+  }
 }
 
-function install() {
-  tpl();
-}
-
-install();
+customElements.define('search-input', SearchInput);
