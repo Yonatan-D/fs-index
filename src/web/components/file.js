@@ -89,11 +89,13 @@ class FileList extends HTMLElement {
     const slot = document.createElement('slot');
     shadow.appendChild(slot);
 
-
     const nodes = slot.assignedNodes();
-    const list = this.filterFileList(nodes);
+    this.render(nodes);
+  }
 
-    Array.from(list).forEach((el) => {
+  render(nodes) {
+    const list = nodes[0].querySelectorAll('ul#files li a');
+    list.forEach((el) => {
       // 移除 title 属性
       el.removeAttribute('title');
 
@@ -111,10 +113,6 @@ class FileList extends HTMLElement {
         sizeEl.innerHTML = formatSize(sizeEl.innerHTML);
       }
     });
-  }
-
-  filterFileList(nodes) {
-    return nodes[0].querySelectorAll('ul#files li a');
   }
 
   connectedCallback() {
