@@ -90,33 +90,155 @@ class FileList extends HTMLElement {
     shadow.appendChild(slot);
 
     const nodes = slot.assignedNodes();
-    this.render(nodes);
-  }
+    this.renderFileList(nodes);
 
-  render(nodes) {
-    const list = nodes[0].querySelectorAll('ul#files li a');
-    list.forEach((el) => {
-      // 移除 title 属性
-      el.removeAttribute('title');
-
-      // 格式化日期
-      const dateEl = el.querySelector('span.date');
-      const dateStr = formatDate(dateEl.innerHTML);
-      dateEl.setAttribute('title', dateStr);
-      dateEl.style.direction = 'ltr';
-      dateEl.innerHTML = datetime2latest(dateStr);
-
-      // 如果不是目录，格式化文件大小
-      if (!el.className.includes('icon-directory')) {
-        const sizeEl = el.querySelector('span.size');
-        sizeEl.style.direction = 'ltr';
-        sizeEl.innerHTML = formatSize(sizeEl.innerHTML);
-      }
+    // 添加右键菜单
+    const contextMenu = document.createElement('div');
+    contextMenu.id = 'contextMenu';
+    contextMenu.innerHTML = `
+      <style>
+        #contextMenu {
+          display: none;
+          position: absolute;
+          background-color: white;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        #contextMenu ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        #contextMenu li {
+          padding: 8px 16px;
+          cursor: pointer;
+        }
+        #contextMenu li:hover {
+          background-color: #f0f0f0;
+        }
+      </style>
+      <ul>
+        <li>预览</li>
+        <li>下载</li>
+      </ul>
+    `;
+    this.contextMenu = contextMenu;
+    shadow.appendChild(contextMenu);
+    this.menuItems = this.shadowRoot.querySelectorAll('#contextMenu li');
+    const that = this;
+    this.menuItems.forEach((item) => {
+      item.addEventListener('click', this.handleMenuItemClick.bind(that, item.textContent));
     });
   }
 
+  renderFileList(nodes) {
+    const list = nodes[0].querySelectorAll('ul#files li');
+    Array.from(list).every(li => li.style.width = '100%');
+    const links = Array.from(list).map(li => li.querySelector('a'));
+    const dates = Array.from(list).map(li => li.querySelector('span.date'));
+    const sizes = Array.from(list).map(li => li.querySelector('span.size'));
+
+    links.forEach((link, index) => {
+      if (link) {
+        link.removeAttribute('title');
+
+        const dateStr = formatDate(dates[index].innerHTML);
+        dates[index].setAttribute('title', dateStr);
+        dates[index].style.direction = 'ltr';
+        dates[index].innerHTML = datetime2latest(dateStr);
+
+        if (!link.className.includes('icon-directory')) {
+          sizes[index].style.direction = 'ltr';
+          sizes[index].innerHTML = formatSize(sizes[index].innerHTML);
+        }
+      }
+    });
+
+    // const list = nodes[0].querySelectorAll('ul#files li');
+    // list.forEach((li) => {
+    //   li.style.width = '100%';
+
+    //   const el = li.querySelector('a');
+    //   if (el) {
+    //     // 移除 title 属性
+    //     el.removeAttribute('title');
+  
+    //     // 格式化日期
+    //     const dateEl = el.querySelector('span.date');
+    //     const dateStr = formatDate(dateEl.innerHTML);
+    //     dateEl.setAttribute('title', dateStr);
+    //     dateEl.style.direction = 'ltr';
+    //     dateEl.innerHTML = datetime2latest(dateStr);
+  
+    //     // 如果不是目录，格式化文件大小
+    //     if (!el.className.includes('icon-directory')) {
+    //       const sizeEl = el.querySelector('span.size');
+    //       sizeEl.style.direction = 'ltr';
+    //       sizeEl.innerHTML = formatSize(sizeEl.innerHTML);
+    //     }
+    //   }
+
+    // });
+  }
+
+  handleContextMenu(event) {
+    const target = event.target;
+    if (target.href) {
+      event.preventDefault();
+
+      target.setAttribute('data-file', target.href);
+      this.contextMenu.style.display = 'block';
+      this.contextMenu.style.left = `${event.pageX}px`;
+      this.contextMenu.style.top = `${event.pageY}px`;
+    } else if (target.parentElement && target.parentElement.href) {
+      event.preventDefault();
+
+      target.parentElement.setAttribute('data-file', target.parentElement.href);
+      this.contextMenu.style.display = 'block';
+      this.contextMenu.style.left = `${event.pageX}px`;
+      this.contextMenu.style.top = `${event.pageY}px`;
+    } else {
+      this.contextMenu.style.display = 'none';
+    }
+  }
+
+  handleClick(event) {
+    if (!event.target.closest('#contextMenu')) {
+      this.contextMenu.style.display = 'none';
+    }
+
+    // this.contextMenu.style.display = 'none';
+  }
+
+  handleMenuItemClick(type) {
+    const fileUrl = decodeURIComponent(this.getAttribute('data-file'));
+    const fileName = fileUrl.slice(fileUrl.lastIndexOf('/') + 1);
+
+    switch (type) {
+      case '预览':
+        alert('🚧施工中');
+        break;
+      case '下载':
+        const link = document.createElement('a');
+        link.href = `${fileUrl}?download`;
+        link.download = fileName;
+        link.click();
+        break;
+      default:
+        window.open(fileUrl);
+        break;
+    }
+  }
+
   connectedCallback() {
-    
+    document.addEventListener('contextmenu', this.handleContextMenu.bind(this));
+    document.addEventListener('click', this.handleClick.bind(this));
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
+    document.removeEventListener('click', this.handleClick.bind(this));
   }
   
 }
