@@ -57,8 +57,7 @@ export default function staticMiddleware(req, res, next) {
   const { MyAPI } = req.app;
   const { filepath: publicDir, temppath, template } = MyAPI.GlobalData.resource;
 
-  const widgets = express.static('src/web/widgets');
-  const plugins = express.static('src/web/plugins');
+  const components = express.static('src/web/components');
   const serve = express.static(publicDir);
   const index = serveIndex(publicDir, {
     icons: true,
@@ -105,7 +104,7 @@ export default function staticMiddleware(req, res, next) {
     }
   }
 
-  const fn = compose([downloader, plugins, widgets, serve, index]);
+  const fn = compose([downloader, components, serve, index]);
   fn(req, res, next);
   // 上面写法等同于以下
   // downloader(req, res, () => {
