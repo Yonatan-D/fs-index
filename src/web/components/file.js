@@ -75,9 +75,10 @@ const datetime2latest = (datetime) => {
  * @return {string} 例如: 10 KB
  */
 const formatSize = (bytes) => {
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  if (bytes == 0) return '0 B';
+  const sizes = ['KB', 'MB', 'GB', 'TB'];
+  if (bytes == 0) return '0 KB';
   const index = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+  if (index < 1) return '1 KB';
   return (bytes / Math.pow(1024, index)).toFixed(1) + ' ' + sizes[index];
 }
 
