@@ -93,6 +93,38 @@ class FileList extends HTMLElement {
     this.renderFileList(nodes);
 
     // 添加右键菜单
+    this.contextMenu = this.createContextMenu(shadow);
+  }
+
+  renderFileList(nodes) {
+    const list = nodes[0].querySelectorAll('ul#files li');
+
+    // 设置所有 li 的宽度为 100%
+    Array.from(list).forEach(li => li.style.width = '100%');
+
+    // 提取所有链接、日期和大小元素
+    const links = Array.from(list).map(li => li.querySelector('a'));
+    const dates = Array.from(list).map(li => li.querySelector('span.date'));
+    const sizes = Array.from(list).map(li => li.querySelector('span.size'));
+
+    links.forEach((link, index) => {
+      if (link) {
+        link.removeAttribute('title');
+
+        const dateStr = formatDate(dates[index].innerHTML);
+        dates[index].setAttribute('title', dateStr);
+        dates[index].style.direction = 'ltr';
+        dates[index].innerHTML = datetime2latest(dateStr);
+
+        if (!link.className.includes('icon-directory')) {
+          sizes[index].style.direction = 'ltr';
+          sizes[index].innerHTML = formatSize(sizes[index].innerHTML);
+        }
+      }
+    });
+  }
+
+  createContextMenu(shadow) {
     const contextMenu = document.createElement('div');
     contextMenu.id = 'contextMenu';
     contextMenu.innerHTML = `
@@ -123,78 +155,19 @@ class FileList extends HTMLElement {
         <li>下载</li>
       </ul>
     `;
-    this.contextMenu = contextMenu;
     shadow.appendChild(contextMenu);
-    this.menuItems = this.shadowRoot.querySelectorAll('#contextMenu li');
-    const that = this;
-    this.menuItems.forEach((item) => {
-      item.addEventListener('click', this.handleMenuItemClick.bind(that, item.textContent));
+    const menuItems = this.shadowRoot.querySelectorAll('#contextMenu li');
+    menuItems.forEach((item) => {
+      item.addEventListener('click', this.handleMenuItemClick.bind(contextMenu, item.textContent));
     });
-  }
-
-  renderFileList(nodes) {
-    const list = nodes[0].querySelectorAll('ul#files li');
-    Array.from(list).every(li => li.style.width = '100%');
-    const links = Array.from(list).map(li => li.querySelector('a'));
-    const dates = Array.from(list).map(li => li.querySelector('span.date'));
-    const sizes = Array.from(list).map(li => li.querySelector('span.size'));
-
-    links.forEach((link, index) => {
-      if (link) {
-        link.removeAttribute('title');
-
-        const dateStr = formatDate(dates[index].innerHTML);
-        dates[index].setAttribute('title', dateStr);
-        dates[index].style.direction = 'ltr';
-        dates[index].innerHTML = datetime2latest(dateStr);
-
-        if (!link.className.includes('icon-directory')) {
-          sizes[index].style.direction = 'ltr';
-          sizes[index].innerHTML = formatSize(sizes[index].innerHTML);
-        }
-      }
-    });
-
-    // const list = nodes[0].querySelectorAll('ul#files li');
-    // list.forEach((li) => {
-    //   li.style.width = '100%';
-
-    //   const el = li.querySelector('a');
-    //   if (el) {
-    //     // 移除 title 属性
-    //     el.removeAttribute('title');
-  
-    //     // 格式化日期
-    //     const dateEl = el.querySelector('span.date');
-    //     const dateStr = formatDate(dateEl.innerHTML);
-    //     dateEl.setAttribute('title', dateStr);
-    //     dateEl.style.direction = 'ltr';
-    //     dateEl.innerHTML = datetime2latest(dateStr);
-  
-    //     // 如果不是目录，格式化文件大小
-    //     if (!el.className.includes('icon-directory')) {
-    //       const sizeEl = el.querySelector('span.size');
-    //       sizeEl.style.direction = 'ltr';
-    //       sizeEl.innerHTML = formatSize(sizeEl.innerHTML);
-    //     }
-    //   }
-
-    // });
+    return contextMenu;
   }
 
   handleContextMenu(event) {
-    const target = event.target;
-    if (target.href) {
+    const link = event.target.closest('a');
+    if (link) {
       event.preventDefault();
-
-      target.setAttribute('data-file', target.href);
-      this.contextMenu.style.display = 'block';
-      this.contextMenu.style.left = `${event.pageX}px`;
-      this.contextMenu.style.top = `${event.pageY}px`;
-    } else if (target.parentElement && target.parentElement.href) {
-      event.preventDefault();
-
-      target.parentElement.setAttribute('data-file', target.parentElement.href);
+      this.contextMenu.setAttribute('data-file', link.getAttribute('href'));
       this.contextMenu.style.display = 'block';
       this.contextMenu.style.left = `${event.pageX}px`;
       this.contextMenu.style.top = `${event.pageY}px`;
@@ -203,12 +176,8 @@ class FileList extends HTMLElement {
     }
   }
 
-  handleClick(event) {
-    if (!event.target.closest('#contextMenu')) {
-      this.contextMenu.style.display = 'none';
-    }
-
-    // this.contextMenu.style.display = 'none';
+  closeContextMenu() {
+    this.contextMenu.style.display = 'none';
   }
 
   handleMenuItemClick(type) {
@@ -233,12 +202,12 @@ class FileList extends HTMLElement {
 
   connectedCallback() {
     document.addEventListener('contextmenu', this.handleContextMenu.bind(this));
-    document.addEventListener('click', this.handleClick.bind(this));
+    document.addEventListener('click', this.closeContextMenu.bind(this));
   }
 
   disconnectedCallback() {
     document.removeEventListener('contextmenu', this.handleContextMenu.bind(this));
-    document.removeEventListener('click', this.handleClick.bind(this));
+    document.removeEventListener('click', this.closeContextMenu.bind(this));
   }
   
 }
