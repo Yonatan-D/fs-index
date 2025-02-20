@@ -1,9 +1,10 @@
-export function saveCookie() {
+function saveCookie(cookieName = 'x-token', path = '/') {
   // 将url携带的token参数设置到Cookie
   const searchParams = new URLSearchParams(window.location.search);
   const token = searchParams.get('token');
   if (token) {
-    document.cookie = 'x-token=' + token + ';path=/';
+    const cookieValue = `${cookieName}=${token};path=${path}`;
+    document.cookie = cookieValue;
   }
 }
 
