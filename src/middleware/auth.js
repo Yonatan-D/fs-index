@@ -4,6 +4,12 @@ export default function auth(req, res, next) {
   const { MyAPI } = req.app;
   const { password } = MyAPI.GlobalData;
 
+  // 静态资源不需要验证
+  if (req.url.startsWith('/public')) {
+    req.url = req.url.replace('/public', '');
+    return next();
+  }
+
   if (
     ['localhost', '127.0.0.1'].includes(req.hostname) // 本地允许访问
     || !password // 未开启密码
