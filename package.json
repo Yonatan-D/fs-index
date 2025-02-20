@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js --port=8081 --filepath=./files",
     "test": "nodemon server.js --port=8081 --filepath=/home/yonatan/pkg --password=ydev",
-    "pm2:start": "pm2 start app.json"
+    "pm2:start": "pm2 start app.config.json"
   },
   "keywords": [],
   "author": "",
