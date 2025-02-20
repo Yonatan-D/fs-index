@@ -84,19 +84,22 @@ const formatSize = (bytes) => {
 class FileList extends HTMLElement {
   constructor() {
     super();
-
-    const shadow = this.attachShadow({ mode: 'open' });
-    const slot = document.createElement('slot');
-    shadow.appendChild(slot);
-
-    const nodes = slot.assignedNodes();
-    this.renderFileList(nodes);
-
-    // 添加右键菜单
-    this.contextMenu = this.createContextMenu(shadow);
+    this.shadow = this.attachShadow({ mode: 'open' });
+    this.init();
   }
 
-  renderFileList(nodes) {
+  init() {
+    // 渲染文件列表
+    this.renderFileList();
+    // 添加右键菜单
+    this.contextMenu = this.createContextMenu();
+  }
+
+  renderFileList() {
+    const slot = document.createElement('slot');
+    this.shadow.appendChild(slot);
+    const nodes = slot.assignedNodes();
+
     const list = nodes[0].querySelectorAll('ul#files li');
 
     // 设置所有 li 的宽度为 100%
@@ -124,7 +127,7 @@ class FileList extends HTMLElement {
     });
   }
 
-  createContextMenu(shadow) {
+  createContextMenu() {
     const contextMenu = document.createElement('div');
     contextMenu.id = 'contextMenu';
     contextMenu.innerHTML = `
@@ -155,7 +158,7 @@ class FileList extends HTMLElement {
         <li>下载</li>
       </ul>
     `;
-    shadow.appendChild(contextMenu);
+    this.shadow.appendChild(contextMenu);
     const menuItems = this.shadowRoot.querySelectorAll('#contextMenu li');
     menuItems.forEach((item) => {
       item.addEventListener('click', this.handleMenuItemClick.bind(contextMenu, item.textContent));
@@ -165,15 +168,18 @@ class FileList extends HTMLElement {
 
   handleContextMenu(event) {
     const link = event.target.closest('a');
-    if (link) {
-      event.preventDefault();
-      this.contextMenu.setAttribute('data-file', link.getAttribute('href'));
-      this.contextMenu.style.display = 'block';
-      this.contextMenu.style.left = `${event.pageX}px`;
-      this.contextMenu.style.top = `${event.pageY}px`;
-    } else {
-      this.contextMenu.style.display = 'none';
+    if (!link) {
+      this.closeContextMenu();
+      return;
     }
+    event.preventDefault();
+    const { pageX, pageY } = event;
+    Object.assign(this.contextMenu.style, {
+      display: 'block',
+      left: `${pageX}px`,
+      top: `${pageY}px`
+    });
+    this.contextMenu.setAttribute('data-file', link.getAttribute('href'));
   }
 
   closeContextMenu() {
