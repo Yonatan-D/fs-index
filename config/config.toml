@@ -1,2 +1,10 @@
+[server]
+port     = 8080
+filepath = "/home/yonatan/pkg"
+password = "ydev"
+pathname = "/"
+https    = { key = "key.pem", cert = "cert.pem" }
+# template = "/path/to/your/index.html"
+
 [onlyoffice]
-server = 'http://localhost:20001'
+server = "http://localhost:20001"
