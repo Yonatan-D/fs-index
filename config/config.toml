@@ -1,10 +1,40 @@
-[server]
-port     = 8080
-filepath = "/home/yonatan/pkg"
-password = "ydev"
-pathname = "/"
-https    = { key = "key.pem", cert = "cert.pem" }
-# template = "/path/to/your/index.html"
+[Server]
+http_port       = 8080                              # HTTP服务端口
+password        = "ydev"                            # 访问密码，不配置就不需要密码
+https_port      = -1                                # HTTPS服务端口，-1表示不启用
+cert_file       = "/path/to/your/cert.crt"          # 证书文件路径
+key_file        = "/path/to/your/key.key"           # 证书密钥文件路径
+# template_html = "/path/to/your/index.html"        # 自定义模板文件路径
 
-[onlyoffice]
-server = "http://localhost:20001"
+[PreviewConf]
+agent           = "onlyoffice"                                    # 预览服务类型，可选值：onlyoffice、kkfileview
+server          = "http://localhost:20003"                        # 预览服务地址
+type            = ["docx", "xlsx", "pptx", "doc", "xls", "ppt"]   # 预览文件类型
+
+# 配置多个目录，每个目录对应一个FxNode
+# [[FxNode]]                                # 目录配置
+# url             = "/"                     # 访问路径，必须唯一
+# path            = "/home/yonatan/pkg"     # 本地路径，必须存在
+#     [FxNode.Options]
+#     autoindex         = "OFF"             # 是否开启目录索引，可选值：ON、OFF
+#     preview           = "OFF"             # 是否开启文件预览，可选值：ON、OFF
+
+#############################################################################################################
+[[FxNode]]
+url             = "/"
+path            = "/home/yonatan/pkg"
+
+[[FxNode]]
+url             = "/apps"
+path            = "/home/yonatan/apps"
+
+[[FxNode]]
+url             = "/code"
+path            = "/home/yonatan/code"
+
+[[FxNode]]
+url                   = "/public"
+path                  = "/home/yonatan/test/public"
+    [FxNode.Options]
+    autoindex         = "OFF"
+    preview           = "OFF"
