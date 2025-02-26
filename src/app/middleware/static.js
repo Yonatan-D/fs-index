@@ -4,7 +4,7 @@ import path from 'node:path';
 import fs from 'fs-extra';
 import { execSync, exec } from 'node:child_process';
 import { platform } from 'node:os';
-import { compose } from '../utils.js';
+import { compose } from '../../lib/utils.js';
 
 /**
  * 获取zip安装命令提示

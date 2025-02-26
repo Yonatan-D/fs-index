@@ -4,8 +4,8 @@ import c from 'kleur';
 import dayjs from 'dayjs';
 import fs from 'fs-extra';
 import toml from 'toml';
-import loadModules from './src/middleware/index.js';
-import loadExtends from './src/extends/index.js';
+import loadModules from './app/middleware/index.js';
+import loadExtends from './app/extends/index.js';
 
 async function createServer() {
   const app = express();
