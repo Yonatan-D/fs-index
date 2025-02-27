@@ -1,17 +1,15 @@
 import express from 'express';
 
-export default class Application {
-  #app;
-
+export class Application {
   constructor() {
-    this.#app = express();
+    this.app = express();
 
     return new Proxy(this, {
       get(target, prop, receiver) {
         if (prop in target) {
           return Reflect.get(target, prop, receiver);
         }
-        return Reflect.get(target.#app, prop, receiver);  
+        return Reflect.get(target.app, prop, receiver);  
       }
     })
   }
