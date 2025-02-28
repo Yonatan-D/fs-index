@@ -35,3 +35,11 @@ class StandardError extends Error {
 
   }
 }
+
+export function startApp() {
+  const app = new Application();
+  app.listen(20003, () => {
+    console.log('server is running on port 20003')
+  })
+  return app;
+}
