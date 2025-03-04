@@ -1,4 +1,4 @@
-import { loadConfig, testConfig } from './lib/core/config.js';
+import { Settings } from './lib/core/config.js';
 import { execute } from './lib/core/command.js';
 import { startApp } from './lib/application.js';
 import c from 'kleur';
@@ -19,7 +19,7 @@ function showVersion() {
 export function main() {
   try {
     // 加载配置
-    loadConfig();
+    Settings.loadConfig();
 
     // 命令模式
     for (const args of process.argv.slice(2)) {
@@ -28,7 +28,7 @@ export function main() {
           showVersion();
           return;
         case '-t':
-          testConfig();
+          Settings.testConfig();
           return;
         default:
           showHelp();

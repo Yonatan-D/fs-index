@@ -17,6 +17,9 @@ importers:
       express:
         specifier: ^4.21.1
         version: 4.21.1
+      extend2:
+        specifier: ^4.0.0
+        version: 4.0.0
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
@@ -174,6 +177,10 @@ packages:
   express@4.21.1:
     resolution: {integrity: sha512-YSFlK1Ee0/GC8QaO91tHcDxJiE/X4FbpAyQWkxAvG6AXCuR65YzK8ua6D9hvi/TzUfZMpc+BwuM1IPw8fmQBiQ==}
     engines: {node: '>= 0.10.0'}
+
+  extend2@4.0.0:
+    resolution: {integrity: sha512-d/h9M79qdaVeAzjJ5Rn2dCt0bENlD34tCRyWhynrngEh+LB+QLPpxB2tAqx/YkLr14dVF0J8xKGGPymvWiuXSg==}
+    engines: {node: '>=18.7.0'}
 
   fill-range@7.1.1:
     resolution: {integrity: sha512-YsGpe3WHLK8ZYi4tWDg2Jy3ebRz2rXowDxnld4bkQB00cc/1Zw9AWnC0i9ztDJitivtQvaI9KaLyKrc+hBW0yg==}
@@ -645,6 +652,8 @@ snapshots:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
+
+  extend2@4.0.0: {}
 
   fill-range@7.1.1:
     dependencies:
