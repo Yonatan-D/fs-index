@@ -13,30 +13,30 @@ server          = "http://localhost:20003"                        # 预览服务
 type            = ["docx", "xlsx", "pptx", "doc", "xls", "ppt"]   # 预览文件类型
 
 # 配置多个目录，每个目录对应一个FxNode
-# [[FxNode]]                                                      # 目录配置
-# url             = "/"                                           # 访问路径，必须唯一
-# path            = "/home/yonatan/pkg"                           # 本地路径，必须存在
-#     [FxNode.Options]
+# [[FileNode]]                                                    # 目录配置
+# context_path          = "/"                                     # 访问路径，必须唯一
+# dir                   = "/home/yonatan/pkg"                     # 本地路径，必须存在
+#     [FileNode.Options]
 #     autoindex         = "OFF"                                   # 是否开启目录索引，默认ON。可选值：ON、OFF
 #     preview           = "OFF"                                   # 是否开启文件预览，默认ON。可选值：ON、OFF
 #     template_html     = ""                                      # 自定义模板文件路径
 
 #############################################################################################################
-[[FxNode]]
-url             = "/"
-path            = "/home/yonatan/pkg"
+[[FileNode]]
+context_path             = "/"
+dir                      = "/home/yonatan/pkg"
 
-[[FxNode]]
-url             = "/apps"
-path            = "/home/yonatan/apps"
+[[FileNode]]
+context_path             = "/apps"
+dir                      = "/home/yonatan/apps"
 
-[[FxNode]]
-url             = "/code"
-path            = "/home/yonatan/code"
+[[FileNode]]
+context_path             = "/code"
+dir                      = "/home/yonatan/code"
 
-[[FxNode]]
-url                   = "/public"
-path                  = "/home/yonatan/test/public"
-    [FxNode.Options]
+[[FileNode]]
+context_path             = "/public"
+dir                      = "/home/yonatan/test/public"
+    [FileNode.Options]
     autoindex         = "OFF"
     preview           = "OFF"
