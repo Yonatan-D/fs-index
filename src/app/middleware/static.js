@@ -62,7 +62,7 @@ export default function staticMiddleware(req, res, next) {
   const index = serveIndex(publicDir, {
     icons: true,
     view: 'details',
-    template: template || path.join(MyAPI.GlobalData.appRoot, 'src/web/index.html'),
+    template: template || path.join(MyAPI.GlobalData.appRoot, 'web/index.html'),
   })
   const downloader = (req, res, next) => {
     // 请求参数包含download时，指示浏览器下载文件而不是直接显示它
