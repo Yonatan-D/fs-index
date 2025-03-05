@@ -55,7 +55,7 @@ export function startApp() {
     FileNode.forEach(n => {
       if (n?.Options?.autoindex === 'OFF') return;
       console.log(c.bold('Index of'), c.yellow(n.context_path));
-      console.log(c.bold('Listening at'), c.cyan(n.href), '\n');
+      console.log(c.bold('Listening at'), c.cyan(n.dir), '\n');
     })
   })
   return app;
