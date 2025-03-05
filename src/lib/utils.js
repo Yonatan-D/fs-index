@@ -1,3 +1,6 @@
+import c from 'kleur';
+import dayjs from 'dayjs';
+
 /**
  * 合并中间件
  * @param {} middlewares 
@@ -14,4 +17,10 @@ export function compose(middlewares) {
     }
     return dispatch(0);
   }
+}
+
+export function getDateStr() {
+  const currentTime = dayjs().format('YYYY-MM-DD HH:mm:ss');
+  const dateStr = c.gray(currentTime);
+  return dateStr;
 }

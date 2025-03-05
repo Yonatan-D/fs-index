@@ -1,7 +1,6 @@
-import { Settings } from './lib/core/config.js';
-import { execute } from './lib/core/command.js';
-import { startApp } from './lib/application.js';
 import c from 'kleur';
+import { startApp } from './lib/application.js';
+import { Settings } from './lib/core/config.js';
 
 function showHelp() {
   // console.log(c.green(c.bold(name)) + c.dim(` ${description} v${version}\n`))

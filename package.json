@@ -10,7 +10,7 @@
     "dev": "nodemon src/index.js --port=8081 --filepath=./files",
     "test": "nodemon src/index.js --port=8081 --filepath=/home/yonatan/pkg --password=ydev",
     "pm2:start": "pm2 start app.config.json",
-    "test2": "fs-index"
+    "test2": "nodemon test/main.test.js"
   },
   "keywords": [],
   "author": "",

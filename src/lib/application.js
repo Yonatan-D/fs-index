@@ -1,4 +1,7 @@
 import express from 'express';
+import c from 'kleur';
+import { Settings } from './core/config.js';
+import { getDateStr } from './utils.js';
 
 export class Application {
   constructor() {
@@ -38,8 +41,22 @@ class StandardError extends Error {
 
 export function startApp() {
   const app = new Application();
-  app.listen(20003, () => {
-    console.log('server is running on port 20003')
+  const {
+    Server: { http_port },
+    FileNode,
+  } = Settings.globalSettings;
+
+  app.listen(http_port, '0.0.0.0', () => {
+    const dateStr = getDateStr();
+    const appName = c.cyan('fsIndex');
+    const startingInfo = c.green('Starting...');
+    console.log(`[${dateStr}] [${appName}] ${startingInfo}`);
+
+    FileNode.forEach(n => {
+      if (n?.Options?.autoindex === 'OFF') return;
+      console.log(c.bold('Index of'), c.yellow(n.context_path));
+      console.log(c.bold('Listening at'), c.cyan(n.href), '\n');
+    })
   })
   return app;
 }
