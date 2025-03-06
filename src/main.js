@@ -1,6 +1,6 @@
 import c from 'kleur';
 import { startApp } from './lib/application.js';
-import { Settings } from './lib/core/config.js';
+import { testConfig } from './lib/core/config.js';
 
 function showHelp() {
   // console.log(c.green(c.bold(name)) + c.dim(` ${description} v${version}\n`))
@@ -16,28 +16,21 @@ function showVersion() {
 }
 
 export function main() {
-  try {
-    // 加载配置
-    Settings.loadConfig();
-
-    // 命令模式
-    for (const args of process.argv.slice(2)) {
-      switch (args) {
-        case '-v':
-          showVersion();
-          return;
-        case '-t':
-          Settings.testConfig();
-          return;
-        default:
-          showHelp();
-          return;
-      }
+  // 命令模式
+  for (const args of process.argv.slice(2)) {
+    switch (args) {
+      case '-v':
+        showVersion();
+        return;
+      case '-t':
+        testConfig();
+        return;
+      default:
+        showHelp();
+        return;
     }
-
-    // 启动服务
-    startApp();
-  } catch (error) {
-    console.log(c.red(error));
   }
+
+  // 启动服务
+  startApp();
 }

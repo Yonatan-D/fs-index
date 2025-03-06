@@ -1,11 +1,12 @@
 import express from 'express';
 import c from 'kleur';
-import { Settings } from './core/config.js';
+import { loadConfig } from './core/config.js';
 import { getDateStr } from './utils.js';
 
 export class Application {
   constructor() {
     this.app = express();
+    this._settings = loadConfig();
 
     return new Proxy(this, {
       get(target, prop, receiver) {
@@ -20,6 +21,10 @@ export class Application {
   Throw(message, code) {
     if (!code) code = 500;
     throw new StandardError(message, code);
+  }
+
+  get GlobalSettings() {
+    return this._settings;
   }
 }
 
@@ -44,7 +49,7 @@ export function startApp() {
   const {
     Server: { http_port },
     FileNode,
-  } = Settings.globalSettings;
+  } = app.GlobalSettings;
 
   app.listen(http_port, '0.0.0.0', () => {
     const dateStr = getDateStr();
@@ -54,8 +59,9 @@ export function startApp() {
 
     FileNode.forEach(n => {
       if (n?.Options?.autoindex === 'OFF') return;
+      console.log(c.bold(`[${n.name}]`));
       console.log(c.bold('Index of'), c.yellow(n.context_path));
-      console.log(c.bold('Listening at'), c.cyan(n.dir), '\n');
+      console.log(c.bold('Listening at'), c.cyan(n.href), '\n');
     })
   })
   return app;

@@ -1,44 +1,54 @@
-import toml from 'toml';
-import fs from 'fs';
 import { extend } from 'extend2';
+import fs from 'fs';
+import path from 'path';
+import toml from 'toml';
 
-export class Settings {
+const cfgFilePath = path.resolve('./config/config.toml');
 
-  constructor(settings) {
-    this.globalSettings = null;
+let _globalSettings;
 
-    const defaultSettings = {
-      Server: {
-        http_port: 3000,
-        https_port: -1,
-        template_html: 'web/index.html',
-      },
-      PreviewConf: {
-        enable: 'OFF',
-      }
+function getSettings(cfgContent) {
+  const defaultSettings = {
+    Server: {
+      http_port: 3000,
+      https_port: -1,
+      template_html: 'web/index.html',
+    },
+    PreviewConf: {
+      enable: 'OFF',
     }
-    const mergedSettings = extend(true, {}, defaultSettings, settings);
-    return new Proxy(mergedSettings, {
+  }
+  const settings = extend(true, {}, defaultSettings, cfgContent);
+  settings.FileNode.forEach(n => {
+    n.href = `http://localhost:${settings.Server.http_port}${n.context_path}`;
+  })
+  return settings;
+}
+
+export function loadConfig() {
+  try {
+    if (!_globalSettings) {
+      const cfgContent = toml.parse(fs.readFileSync(cfgFilePath, 'utf8'));
+      _globalSettings = getSettings(cfgContent);
+    }
+    return new Proxy(_globalSettings, {
       get(target, key) {
         return target[key] ? target[key] : '';
       }
-    })
+    });
+  } catch (error) {
+    throw new Error(`Config: 读取配置文件失败 (${error.message})\n`);
   }
+}
 
-  static loadConfig() {
-    try {
-      if (!this.globalSettings) {
-        const cfgContent = toml.parse(fs.readFileSync('./config/config.toml', 'utf8'));
-        this.globalSettings = new Settings(cfgContent);
-      }
-      return JSON.parse(JSON.stringify(this.globalSettings));
-    } catch (error) {
-      throw `Config: 读取配置文件失败 (${error.message})\n`;
-    }
+export function testConfig() {
+  let status = 'successful';
+  try {
+    const settings = loadConfig();
+    console.log(JSON.parse(JSON.stringify(settings)));
+  } catch (error) {
+    status = 'failed';
+    console.log(error, '\n');
   }
-
-  static testConfig() {
-    const status = 'successful'; // failed
-    console.log(`fs-index: configuration file xxx test is ${status}\n`);
-  }
+  console.log(`fs-index: configuration file ${cfgFilePath} test is ${status}\n`);
 }

@@ -23,18 +23,22 @@ type            = ["docx", "xlsx", "pptx", "doc", "xls", "ppt"]   # 预览文件
 
 #############################################################################################################
 [[FileNode]]
+name                     = "pkg"
 context_path             = "/"
 dir                      = "/home/yonatan/pkg"
 
 [[FileNode]]
+name                     = "apps"
 context_path             = "/apps"
 dir                      = "/home/yonatan/apps"
 
 [[FileNode]]
+name                     = "code"
 context_path             = "/code"
 dir                      = "/home/yonatan/code"
 
 [[FileNode]]
+name                     = "public"
 context_path             = "/public"
 dir                      = "/home/yonatan/test/public"
     [FileNode.Options]
