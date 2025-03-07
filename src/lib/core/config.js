@@ -32,8 +32,8 @@ export function loadConfig() {
       _globalSettings = getSettings(cfgContent);
     }
     return new Proxy(_globalSettings, {
-      get(target, key) {
-        return target[key] ? target[key] : '';
+      get(target, key, receiver) {
+        return Reflect.get(target, key, receiver);
       }
     });
   } catch (error) {
